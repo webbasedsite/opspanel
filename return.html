@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Return Run</title>
+<style>
+body{
+    font-family: 'Segoe UI', sans-serif;
+    background:#f4f6f9;
+    margin:0;
+    padding:20px;
+    text-align:center;
+}
+.header{
+    background:#1f2937;
+    color:white;
+    font-size:20px;
+    font-weight:bold;
+    padding:18px;
+    border-radius:8px;
+}
+.container{
+    margin-top:20px;
+}
+.menu-card{
+    background:white;
+    padding:20px;
+    margin-bottom:12px;
+    border-radius:12px;
+    font-size:18px;
+    font-weight:600;
+    cursor:pointer;
+    transition:0.3s;
+    box-shadow:0 4px 10px rgba(0,0,0,0.05);
+}
+.menu-card:hover{
+    transform:translateY(-3px);
+}
+.icon{
+    font-size:30px;
+    margin-bottom:10px;
+    display:block;
+}
+.section{
+    display:none;
+    margin-top:20px;
+    text-align:left;
+}
+label{
+    display:block;
+    margin-top:10px;
+    font-weight:600;
+}
+input, select{
+    width:100%;
+    padding:10px;
+    margin-top:5px;
+    border-radius:6px;
+    border:1px solid #ccc;
+}
+button{
+    margin-top:10px;
+    padding:10px 14px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:14px;
+}
+.back-btn{
+    background:#ef4444;
+    color:white;
+}
+.primary-btn{
+    background:#2563eb;
+    color:white;
+}
+.success-btn{
+    background:#16a34a;
+    color:white;
+}
+.assigned-list{
+    margin-top:10px;
+    background:white;
+    padding:10px;
+    border-radius:8px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.05);
+}
+.assigned-item{
+    padding:6px 0;
+    border-bottom:1px solid #eee;
+}
+.success-message{
+    color:#16a34a;
+    font-weight:600;
+    margin-top:5px;
+    display:none;
+}
+</style>
+</head>
+<body>
+
+<div class="header">Return Run</div>
+<div class="container">
+
+    <!-- Menu cards like Transfer -->
+    <button class="back-btn" onclick="location.href='run-management.html'">⬅ Back</button>
+
+    <div id="menuSection">
+        <div class="menu-card" onclick="showSection('hubSection')">
+            <span class="icon">🏢</span>
+            Pending From Hub
+        </div>
+        <div class="menu-card" onclick="showSection('fmSection')">
+            <span class="icon">🚛</span>
+            Return At First Mile
+        </div>
+    </div>
+
+    <!-- Pending From Hub Section -->
+    <div id="hubSection" class="section">
+        <button class="back-btn" onclick="backToMenu()">⬅ Back</button>
+        <h3>Pending From Hub</h3>
+        <button class="primary-btn" onclick="createBasket()">Basket Create</button>
+        <label>Select Route</label>
+        <select id="returnHubRoute">
+            <option>Pallabi - Rupnagar</option>
+            <option>Pallabi - Mirpur DOHS</option>
+        </select>
+        <label>Select VDA</label>
+        <select id="returnHubVDA">
+            <option>VDA 1</option>
+            <option>VDA 2</option>
+        </select>
+        <label>Scan Here</label>
+        <input type="text" id="returnHubScan" placeholder="Scan barcode" onkeypress="if(event.key==='Enter') assignReturnHub()">
+        <button class="success-btn" onclick="assignReturnHub()">Assign</button>
+        <div id="returnHubSuccess" class="success-message">Assigned Successfully ✅</div>
+        <div id="returnHubAssignedList" class="assigned-list"></div>
+    </div>
+
+    <!-- Return At First Mile Section -->
+    <div id="fmSection" class="section">
+        <button class="back-btn" onclick="backToMenu()">⬅ Back</button>
+        <h3>Return At First Mile</h3>
+        <label>Select Route</label>
+        <select id="returnFMRoute">
+            <option>Pallabi - Rupnagar</option>
+            <option>Pallabi - Mirpur DOHS</option>
+        </select>
+        <label>Select Agent</label>
+        <select id="returnFMAgent">
+            <option>Rahim - 01700000001</option>
+            <option>Karim - 01700000002</option>
+        </select>
+        <label>Scan Here</label>
+        <input type="text" id="returnFMScan" placeholder="Scan barcode" onkeypress="if(event.key==='Enter') assignReturnFM()">
+        <button class="success-btn" onclick="assignReturnFM()">Assign</button>
+        <div id="returnFMsuccess" class="success-message">Assigned Successfully ✅</div>
+        <div id="returnFMAssignedList" class="assigned-list"></div>
+    </div>
+
+</div>
+
+<script>
+function showSection(id){
+    document.getElementById('menuSection').style.display='none';
+    document.getElementById(id).style.display='block';
+}
+
+function backToMenu(){
+    document.getElementById('menuSection').style.display='block';
+    document.getElementById('hubSection').style.display='none';
+    document.getElementById('fmSection').style.display='none';
+}
+
+function createBasket(){
+    alert('Basket created successfully!');
+}
+
+function assignReturnHub(){
+    const route = document.getElementById('returnHubRoute').value;
+    const vda = document.getElementById('returnHubVDA').value;
+    const scan = document.getElementById('returnHubScan').value.trim();
+    if(!scan){ alert('Please scan barcode!'); return; }
+    const list = document.getElementById('returnHubAssignedList');
+    const item = document.createElement('div');
+    item.className='assigned-item';
+    item.textContent = `${vda} assigned to ${route} (Scan: ${scan})`;
+    list.appendChild(item);
+    document.getElementById('returnHubScan').value='';
+    const msg = document.getElementById('returnHubSuccess');
+    msg.style.display='block';
+    setTimeout(()=>msg.style.display='none',2500);
+}
+
+function assignReturnFM(){
+    const route = document.getElementById('returnFMRoute').value;
+    const agent = document.getElementById('returnFMAgent').value;
+    const scan = document.getElementById('returnFMScan').value.trim();
+    if(!scan){ alert('Please scan barcode!'); return; }
+    const list = document.getElementById('returnFMAssignedList');
+    const item = document.createElement('div');
+    item.className='assigned-item';
+    item.textContent = `${agent} assigned to ${route} (Scan: ${scan})`;
+    list.appendChild(item);
+    document.getElementById('returnFMScan').value='';
+    const msg = document.getElementById('returnFMsuccess');
+    msg.style.display='block';
+    setTimeout(()=>msg.style.display='none',2500);
+}
+</script>
+
+</body>
+</html>

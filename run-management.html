@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ops View - Run Management</title>
+
+<style>
+body {
+    background:#f4f6f9;
+    font-family:'Segoe UI', sans-serif;
+    margin:0;
+    padding:0;
+}
+
+.header {
+    background:#1f2937;
+    color:white;
+    padding:18px;
+    text-align:center;
+    font-size:18px;
+    font-weight:bold;
+}
+
+.container {
+    padding:20px;
+}
+
+.menu-card {
+    background:white;
+    padding:20px;
+    margin-bottom:12px;
+    border-radius:12px;
+    text-align:center;
+    font-size:18px;
+    font-weight:600;
+    cursor:pointer;
+    transition:0.3s;
+    box-shadow:0 4px 10px rgba(0,0,0,0.05);
+}
+
+.menu-card:hover {
+    transform:translateY(-3px);
+}
+
+.icon {
+    font-size:30px;
+    margin-bottom:10px;
+    display:block;
+}
+
+/* Send & Receive Button Section */
+.action-section {
+    margin-top:25px;
+    display:flex;
+    gap:10px;
+}
+
+.action-btn {
+    flex:1;
+    padding:14px;
+    border:none;
+    border-radius:10px;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">Run Management</div>
+
+<div class="container">
+
+    <div class="menu-card" onclick="location.href='pickup.html'">
+        <span class="icon">🚚</span>Pickup
+    </div>
+
+    <div class="menu-card" onclick="location.href='transfer.html'">
+        <span class="icon">🔄</span>Transfer Run
+    </div>
+
+    <div class="menu-card" onclick="location.href='delivery.html'">
+        <span class="icon">📦</span>Delivery
+    </div>
+
+    <div class="menu-card" onclick="location.href='return.html'">
+        <span class="icon">↩️</span>Return
+    </div>
+
+</div>
+
+</body>
+</html>

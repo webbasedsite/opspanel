@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Order Processing</title>
+<style>
+body{
+    font-family: 'Segoe UI', sans-serif;
+    background: #f4f6f9;
+    margin: 0;
+    padding: 20px;
+}
+.header{
+    background: #1f2937;
+    color: white;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 18px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+.tab-buttons{
+    display:flex;
+    gap:10px;
+    margin-bottom: 20px;
+}
+.tab-buttons button{
+    flex:1;
+    padding:10px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:bold;
+    background:#e5e7eb;
+    transition:0.2s;
+}
+.tab-buttons button.active{
+    background:#2563eb;
+    color:white;
+}
+.search-section{
+    margin-bottom:15px;
+    text-align:right;
+}
+.search-section input{
+    padding:6px 10px;
+    border-radius:6px;
+    border:1px solid #ccc;
+}
+table{
+    width:100%;
+    border-collapse: collapse;
+    background:white;
+    border-radius: 10px;
+    overflow:hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+th, td{
+    padding:12px;
+    border-bottom:1px solid #eee;
+    font-size:14px;
+    text-align:left;
+}
+th{
+    background:#1f2937;
+    color:white;
+}
+button.action-btn{
+    padding:6px 12px;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:13px;
+    background:#16a34a;
+    color:white;
+}
+input.editable{
+    width:50px;
+    padding:4px 6px;
+    text-align:center;
+    border:1px solid #ccc;
+    border-radius:4px;
+}
+</style>
+</head>
+<body>
+
+<div class="header">Order Processing</div>
+
+<div class="tab-buttons">
+    <button class="active" onclick="switchTab('delivery')">Delivery</button>
+    <button onclick="switchTab('return')">Return</button>
+</div>
+
+<div class="search-section">
+    <input type="text" id="searchInput" placeholder="Search Customer Phone" onkeyup="filterTable()">
+</div>
+
+<table id="orderTable">
+    <thead>
+        <tr>
+            <th>Consignment ID</th>
+            <th>COD</th>
+            <th>Customer Phone</th>
+            <th>Weight</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody id="orderBody">
+        <!-- Rows will be generated dynamically -->
+    </tbody>
+</table>
+
+<script>
+// Example data
+const orders = [
+    {consignment: "F0211787792", cod: 700, phone: "0116667", weight: 1},
+    {consignment: "F0211787793", cod: 500, phone: "0111234", weight: 2},
+    {consignment: "F0211787794", cod: 300, phone: "0115678", weight: 1},
+];
+
+let currentTab = 'delivery';
+
+function switchTab(tab){
+    currentTab = tab;
+    document.querySelectorAll('.tab-buttons button').forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+    renderTable();
+}
+
+function renderTable(){
+    const tbody = document.getElementById('orderBody');
+    tbody.innerHTML = '';
+    orders.forEach(order => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${order.consignment}</td>
+            <td>${order.cod}</td>
+            <td>${order.phone}</td>
+            <td><input class="editable" type="number" value="${order.weight}"></td>
+            <td><button class="action-btn" onclick="sortAndPrint('${order.consignment}')">Sort & Print</button></td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+function filterTable(){
+    const filter = document.getElementById('searchInput').value.toLowerCase();
+    const rows = document.querySelectorAll('#orderBody tr');
+    rows.forEach(row => {
+        const phone = row.cells[2].innerText.toLowerCase();
+        row.style.display = phone.includes(filter) ? '' : 'none';
+    });
+}
+
+function sortAndPrint(consignmentId){
+    alert('Sorting and printing consignment: ' + consignmentId);
+}
+
+// Initial render
+renderTable();
+</script>
+
+</body>
+</html>

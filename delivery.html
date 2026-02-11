@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Delivery Run</title>
+<style>
+body{
+    font-family: 'Segoe UI', sans-serif;
+    background:#f4f6f9;
+    margin:0;
+    padding:20px;
+    text-align:center;
+}
+.header{
+    background:#1f2937;
+    color:white;
+    font-size:20px;
+    font-weight:bold;
+    padding:18px;
+    border-radius:8px;
+}
+.container{
+    margin-top:20px;
+}
+.menu-card{
+    background:white;
+    padding:20px;
+    margin-bottom:12px;
+    border-radius:12px;
+    font-size:18px;
+    font-weight:600;
+    cursor:pointer;
+    transition:0.3s;
+    box-shadow:0 4px 10px rgba(0,0,0,0.05);
+}
+.menu-card:hover{
+    transform:translateY(-3px);
+}
+.icon{
+    font-size:30px;
+    margin-bottom:10px;
+    display:block;
+}
+.section{
+    display:none;
+    margin-top:20px;
+    text-align:left;
+}
+label{
+    display:block;
+    margin-top:10px;
+    font-weight:600;
+}
+input, select{
+    width:100%;
+    padding:10px;
+    margin-top:5px;
+    border-radius:6px;
+    border:1px solid #ccc;
+}
+button{
+    margin-top:10px;
+    padding:10px 14px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:14px;
+}
+.back-btn{
+    background:#ef4444;
+    color:white;
+}
+.primary-btn{
+    background:#2563eb;
+    color:white;
+}
+.success-btn{
+    background:#16a34a;
+    color:white;
+}
+.assigned-list{
+    margin-top:10px;
+    background:white;
+    padding:10px;
+    border-radius:8px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.05);
+}
+.assigned-item{
+    padding:6px 0;
+    border-bottom:1px solid #eee;
+}
+.success-message{
+    color:#16a34a;
+    font-weight:600;
+    margin-top:5px;
+    display:none;
+}
+#scanner-container{
+    width:100%;
+    max-width:400px;
+    margin-top:10px;
+}
+video{
+    width:100%;
+    border:1px solid #ccc;
+}
+#result{
+    margin-top:10px;
+    font-size:1.1em;
+    color:green;
+}
+</style>
+</head>
+<body>
+
+<div class="header">Delivery Run</div>
+<div class="container">
+  
+<!-- Menu cards like Transfer -->
+    <button class="back-btn" onclick="location.href='run-management.html'">⬅ Back</button>
+
+    <div id="menuSection">
+        <div class="menu-card" onclick="showSection('assignAgentSection')">
+            <span class="icon">🚚</span>
+            Assign Delivery Agent
+        </div>
+        <div class="menu-card" onclick="showSection('assignedRunsSection')">
+            <span class="icon">📦</span>
+            Assigned Delivery Runs
+        </div>
+    </div>
+
+    <!-- Assign Delivery Agent Section -->
+    <div id="assignAgentSection" class="section">
+        <button class="back-btn" onclick="backToMenu()">⬅ Back</button>
+        <h3>Assign Delivery Agent</h3>
+
+        <label>Select Route</label>
+        <select id="deliveryRoute">
+            <option>Pallabi - Rupnagar</option>
+            <option>Pallabi - Mirpur DOHS</option>
+        </select>
+
+        <label>Select Agent</label>
+        <select id="deliveryAgent">
+            <option>Rahim - 01700000001</option>
+            <option>Karim - 01700000002</option>
+        </select>
+
+        <label>Scan Delivery Run ID</label>
+        <input type="text" id="deliveryScan" placeholder="Enter or Scan ID" onkeypress="if(event.key==='Enter') assignDelivery()">
+
+        <div id="scanner-container">
+            <video id="barcode-scanner" autoplay></video>
+        </div>
+        <div id="result">Scanned Code: <span id="code">None</span></div>
+
+        <button class="success-btn" onclick="assignDelivery()">Assign</button>
+        <div id="deliverySuccess" class="success-message">Assigned Successfully ✅</div>
+
+        <div id="deliveryAssignedList" class="assigned-list"></div>
+    </div>
+
+    <!-- Assigned Delivery Runs Section -->
+    <div id="assignedRunsSection" class="section">
+        <button class="back-btn" onclick="backToMenu()">⬅ Back</button>
+        <h3>Assigned Delivery Runs</h3>
+        <div id="viewAssignedRuns" class="assigned-list"></div>
+    </div>
+
+</div>
+
+<!-- QuaggaJS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
+
+<script>
+function showSection(id){
+    document.getElementById('menuSection').style.display='none';
+    document.getElementById(id).style.display='block';
+}
+
+function backToMenu(){
+    document.getElementById('menuSection').style.display='block';
+    document.getElementById('assignAgentSection').style.display='none';
+    document.getElementById('assignedRunsSection').style.display='none';
+}
+
+// Initialize QuaggaJS Scanner
+Quagga.init({
+    inputStream: {
+        name: "Live",
+        type: "LiveStream",
+        target: document.querySelector('#barcode-scanner'),
+        constraints: { facingMode: "environment" }
+    },
+    decoder: {
+        readers: ["code_128_reader", "ean_reader", "ean_8_reader", "upc_reader", "upc_e_reader"]
+    }
+}, function(err){
+    if(err){ console.error(err); alert("Error initializing barcode scanner."); return; }
+    Quagga.start();
+});
+
+// Update input field when barcode is detected
+Quagga.onDetected(function(result){
+    const code = result.codeResult.code;
+    document.getElementById('code').textContent = code;
+    document.getElementById('deliveryScan').value = code;
+});
+
+// Assign delivery agent
+function assignDelivery(){
+    const route = document.getElementById('deliveryRoute').value;
+    const agent = document.getElementById('deliveryAgent').value;
+    const scan = document.getElementById('deliveryScan').value.trim();
+    if(!scan){ alert('Please enter or scan a Run ID!'); return; }
+
+    const list = document.getElementById('deliveryAssignedList');
+    const item = document.createElement('div');
+    item.className='assigned-item';
+    item.textContent = `${agent} assigned to ${route} (Run ID: ${scan})`;
+    list.appendChild(item);
+
+    const assignedView = document.getElementById('viewAssignedRuns');
+    const runItem = document.createElement('div');
+    runItem.className='assigned-item';
+    runItem.textContent = `Run ID: ${scan} → Agent: ${agent} → Route: ${route}`;
+    assignedView.appendChild(runItem);
+
+    document.getElementById('deliveryScan').value='';
+    const msg = document.getElementById('deliverySuccess');
+    msg.style.display='block';
+    setTimeout(()=>msg.style.display='none',2500);
+}
+</script>
+
+</body>
+</html>

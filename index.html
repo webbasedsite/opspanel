@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Logistics Management</title>
+
+<style>
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', sans-serif; }
+body { background:#f4f6f9; }
+.header { background:#1f2937; color:white; padding:18px; text-align:center; font-size:18px; font-weight:bold; }
+.container { padding:20px; }
+.menu-card { background:white; padding:30px 20px; margin-bottom:20px; border-radius:12px; text-align:center; font-size:18px; font-weight:600; cursor:pointer; transition:0.3s; box-shadow:0 4px 10px rgba(0,0,0,0.05); }
+.menu-card:hover { transform:translateY(-3px); }
+.run { border-left:6px solid #f4a100; }
+.order { border-left:6px solid #3b82f6; }
+.icon { font-size:30px; margin-bottom:10px; display:block; }
+</style>
+</head>
+
+<body>
+
+<div class="header">Logistics Panel</div>
+
+<div class="container">
+
+    <!-- Run Management -->
+    <div class="menu-card run" onclick="location.href='run-management.html'">
+        <span class="icon">🚚</span>
+        Run Management
+    </div>
+
+    <!-- Order Processing -->
+    <div class="menu-card order" onclick="location.href='sort.html'">
+        <span class="icon">📦</span>
+        Order Processing
+    </div>
+
+</div>
+
+</body>
+</html>
