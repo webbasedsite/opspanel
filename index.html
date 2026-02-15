@@ -6,35 +6,108 @@
 <title>Logistics Management</title>
 
 <style>
-* { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', sans-serif; }
-body { background:#f4f6f9; }
-.header { background:#1f2937; color:white; padding:18px; text-align:center; font-size:18px; font-weight:bold; }
-.container { padding:20px; }
-.menu-card { background:white; padding:30px 20px; margin-bottom:20px; border-radius:12px; text-align:center; font-size:18px; font-weight:600; cursor:pointer; transition:0.3s; box-shadow:0 4px 10px rgba(0,0,0,0.05); }
-.menu-card:hover { transform:translateY(-3px); }
+* {
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI', sans-serif;
+}
+
+body {
+    background:#f4f6f9;
+}
+
+/* Header */
+.header {
+    background: linear-gradient(90deg,#1f2937,#111827);
+    color:white;
+    padding:20px;
+    text-align:center;
+    font-size:20px;
+    font-weight:600;
+    letter-spacing:1px;
+}
+
+/* Container Grid */
+.container {
+    padding:30px 20px;
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap:20px;
+}
+
+/* Card Style */
+.menu-card {
+    background:white;
+    padding:30px 20px;
+    border-radius:12px;
+    text-align:center;
+    font-size:18px;
+    font-weight:600;
+    text-decoration:none;
+    color:#111827;
+    transition:0.3s ease;
+    box-shadow:0 4px 10px rgba(0,0,0,0.05);
+    display:block;
+}
+
+/* Hover Effect */
+.menu-card:hover {
+    transform:translateY(-5px);
+    box-shadow:0 8px 18px rgba(0,0,0,0.08);
+}
+
+/* Colored Borders */
 .run { border-left:6px solid #f4a100; }
 .order { border-left:6px solid #3b82f6; }
-.icon { font-size:30px; margin-bottom:10px; display:block; }
+
+/* Icon Circle */
+.icon {
+    font-size:28px;
+    background:#f3f4f6;
+    width:60px;
+    height:60px;
+    line-height:60px;
+    border-radius:50%;
+    margin:0 auto 15px;
+}
+
+/* Subtitle */
+.card-desc {
+    font-size:14px;
+    font-weight:400;
+    color:#6b7280;
+    margin-top:8px;
+}
+
+/* Mobile */
+@media (max-width:600px) {
+    .header {
+        font-size:18px;
+    }
+}
 </style>
 </head>
 
 <body>
 
-<div class="header">Logistics Panel</div>
+<div class="header">🚛 Logistics Management Panel</div>
 
 <div class="container">
 
     <!-- Run Management -->
-    <div class="menu-card run" onclick="location.href='run-management.html'">
-        <span class="icon">🚚</span>
+    <a href="run-management.html" class="menu-card run">
+        <div class="icon">🚚</div>
         Run Management
-    </div>
+        <div class="card-desc">Create, assign and monitor delivery runs</div>
+    </a>
 
     <!-- Order Processing -->
-    <div class="menu-card order" onclick="location.href='sort.html'">
-        <span class="icon">📦</span>
+    <a href="sort.html" class="menu-card order">
+        <div class="icon">📦</div>
         Order Processing
-    </div>
+        <div class="card-desc">Sort, scan and process shipment orders</div>
+    </a>
 
 </div>
 
